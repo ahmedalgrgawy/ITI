@@ -1,0 +1,11 @@
+{
+  "name": "day-1",
+  "version": "1.0.0",
+  "description": "Task",
+  "main": "dayOne.js",
+  "scripts": {
+    "test": "node dayOne.js"
+  },
+  "author": "Algrgawy",
+  "license": "ISC"
+}

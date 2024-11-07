@@ -1,0 +1,35 @@
+[
+    {
+        "name": "p1",
+        "color": "red",
+        "price": "1000"
+    },
+    {
+        "name": "p2",
+        "color": "yellow",
+        "price": "1000"
+    },
+    {
+        "name": "p3",
+        "color": "green",
+        "price": "1000"
+    },
+    {
+        "id": 4,
+        "name": "p4",
+        "color": "green",
+        "price": 500
+    },
+    {
+        "id": 5,
+        "name": "p5",
+        "color": "p5 color",
+        "price": 20
+    },
+    {
+        "id": 6,
+        "name": "new p6 name",
+        "color": "new p6 color",
+        "price": 320
+    }
+]
