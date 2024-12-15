@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .head {
+    @apply text-center py-1 px-4 w-full mb-4 text-3xl text-white bg-slate-700;
+  }
+}
