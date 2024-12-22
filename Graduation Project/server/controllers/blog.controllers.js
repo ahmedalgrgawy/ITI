@@ -1,3 +1,4 @@
+import cloudinary from "../lib/cloudinary.js";
 import Blog from "../models/blog.model.js"
 
 export const getAllBlogs = async (req, res) => {
@@ -14,9 +15,15 @@ export const getAllBlogs = async (req, res) => {
 
 export const postBlog = async (req, res) => {
     try {
-        const { title, text, imgUrl, tags } = req.body;
+        const { title, text, img, tags } = req.body;
+        let imgUrl;
 
-        const newPost = new Blog({ title, text, imgUrl, tags, author: req.user._id });
+        if (img) {
+            const uploadResponse = await cloudinary.uploader.upload(img)
+            imgUrl = uploadResponse.secure_url
+        }
+
+        const newPost = new Blog({ title, text, image: imgUrl, tags, author: req.user._id });
 
         await newPost.save();
 
@@ -31,7 +38,13 @@ export const editBlog = async (req, res) => {
     try {
 
         const id = req.params.id;
-        const { title, text, imgUrl, tags } = req.body;
+        const { title, text, img, tags } = req.body;
+        let imgUrl;
+
+        if (img) {
+            const uploadResponse = await cloudinary.uploader.upload(img)
+            imgUrl = uploadResponse.secure_url
+        }
 
         const blog = await Blog.findById(id);
 
@@ -45,7 +58,7 @@ export const editBlog = async (req, res) => {
 
         blog.text = text || blog.text;
 
-        blog.imgUrl = imgUrl || blog.imgUrl;
+        blog.image = imgUrl || blog.image;
 
         blog.tags = tags || blog.tags;
 

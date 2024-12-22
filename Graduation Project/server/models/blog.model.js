@@ -10,7 +10,7 @@ const blogSchema = new mongoose.Schema(
             type: String,
             required: [true, "text is required"],
         },
-        imgUrl: {
+        image: {
             type: String,
             default: ""
         },
