@@ -1,0 +1,20 @@
+THE STORY 
+We need a blogging website, that users can register to publish their blogs onto and that readers can visit to be able to read blogs. 
+Users  be able to see their posts on their my Blogs and see other blogs in home page.
+
+Here’s what we need 
+-	blogs 
+	Blogs have title, body, photo, author, and tags
+	Users can search using either the author, the title or any of the tags
+-    User
+	name,email ,password,array of his blogs
+
+-	Home page 
+	This page will contain the all blogs posts by all website users
+-	Registered User
+	Can post blogs
+	Can edit, delete his own blogs
+	Can search
+
+
+
