@@ -14,12 +14,9 @@ export const getAllBlogs = async (req, res) => {
 
 export const postBlog = async (req, res) => {
     try {
-
-        const user = req.user;
-
         const { title, text, imgUrl, tags } = req.body;
 
-        const newPost = new Blog({ title, text, imgUrl, tags, author: user._id });
+        const newPost = new Blog({ title, text, imgUrl, tags, author: req.user._id });
 
         await newPost.save();
 
@@ -38,7 +35,9 @@ export const editBlog = async (req, res) => {
 
         const blog = await Blog.findById(id);
 
-        if (blog.author != req.user._id) return res.status(401).json({ message: "Unauthorized" });
+        if (blog.author.toString() != req.user._id.toString()) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
 
         if (!blog) return res.status(404).json({ message: "Blog not found" });
 
@@ -66,11 +65,11 @@ export const deleteBlog = async (req, res) => {
 
         const blog = await Blog.findById(id);
 
-        if (blog.author != req.user._id) return res.status(401).json({ message: "Unauthorized" });
+        if (blog.author.toString() != req.user._id.toString()) return res.status(401).json({ message: "Unauthorized" });
 
         if (!blog) return res.status(404).json({ message: "Blog not found" });
 
-        await blog.remove();
+        await Blog.findByIdAndDelete(id);
 
         res.status(200).json({ success: true, message: "Blog deleted successfully" });
 
