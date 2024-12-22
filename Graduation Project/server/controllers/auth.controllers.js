@@ -32,13 +32,13 @@ export const signup = async (req, res) => {
             return res.status(400).json({ message: "User already exists" })
         }
 
-        const newUser = new User({ email, name, password })
+        const newUser = await User.create({ email, name, password })
 
         const { accessToken } = generateToken(newUser._id)
 
         storeTokenInCookies(res, accessToken)
 
-        newUser.save()
+        await newUser.save()
 
         newUser.password = undefined
 
