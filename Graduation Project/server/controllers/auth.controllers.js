@@ -17,6 +17,14 @@ export const getUserBlogs = async (req, res) => {
     }
 }
 
+export const checkAuth = async (req, res) => {
+    try {
+        return res.status(200).json({ success: true, message: "Authenticated", user: req.user })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message })
+    }
+}
+
 export const signup = async (req, res) => {
     try {
 
