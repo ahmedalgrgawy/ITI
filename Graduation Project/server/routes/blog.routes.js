@@ -12,6 +12,6 @@ router.put('/:id', protectedRoute, editBlog)
 
 router.delete('/:id', protectedRoute, deleteBlog)
 
-router.post('/post', protectedRoute, searchBlog)
+router.get('/search/:query', searchBlog)
 
 export default router;

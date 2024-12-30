@@ -9,17 +9,16 @@ export const useAuthStore = create((set, get) => ({
     isCheckingAuth: false,
 
     checkAuth: async () => {
-        set({ isLoading: true })
+        set({ isCheckingAuth: true })
 
         try {
 
             const response = await axiosInstance.get("/user/check-auth")
 
-            set({ user: response.data.user, isLoading: false })
+            set({ user: response.data.user, isCheckingAuth: false })
 
         } catch (error) {
-            set({ isLoading: false })
-            console.log(error);
+            set({ isCheckingAuth: false })
         }
     },
 
@@ -52,7 +51,7 @@ export const useAuthStore = create((set, get) => ({
 
             set({ user: response.data.user, isLoading: false })
 
-            toast.success("user logged in successfully",{ duration: 5000 })
+            toast.success("user logged in successfully", { duration: 5000 })
 
         } catch (error) {
             set({ isLoading: false })

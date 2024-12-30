@@ -6,9 +6,13 @@ import { storeTokenInCookies } from '../utils/storeToken.js'
 export const getUserBlogs = async (req, res) => {
     try {
 
-        const user = req.user;
+        const userId = req.user._id.toString();
 
-        const blogs = await Blog.find({ author: user._id })
+        const blogs = await Blog.find({ author: userId }).sort({ createdAt: -1 })
+
+        blogs.forEach(blog => {
+            blog.author = req.user
+        })
 
         return res.status(200).json({ success: true, blogs })
 

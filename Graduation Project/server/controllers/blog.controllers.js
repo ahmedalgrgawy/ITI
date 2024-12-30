@@ -1,12 +1,24 @@
 import cloudinary from "../lib/cloudinary.js";
 import Blog from "../models/blog.model.js"
+import User from "../models/user.model.js";
 
 export const getAllBlogs = async (req, res) => {
     try {
 
         const blogs = await Blog.find({}).sort({ createdAt: -1 });
+        const users = await User.find({});
 
-        res.status(200).json(blogs);
+        if (!blogs) return res.status(404).json({ message: "Blogs not found" });
+
+        blogs.forEach(blog => {
+            users.forEach(user => {
+                if (blog.author.toString() === user._id.toString()) {
+                    blog.author = user;
+                }
+            })
+        })
+
+        res.status(200).json({ success: true, blogs });
 
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -15,11 +27,12 @@ export const getAllBlogs = async (req, res) => {
 
 export const postBlog = async (req, res) => {
     try {
-        const { title, text, img, tags } = req.body;
+        const { title, text, image, tags } = req.body;
+        const user = req.user;
         let imgUrl;
 
-        if (img) {
-            const uploadResponse = await cloudinary.uploader.upload(img)
+        if (image) {
+            const uploadResponse = await cloudinary.uploader.upload(image)
             imgUrl = uploadResponse.secure_url
         }
 
@@ -27,7 +40,11 @@ export const postBlog = async (req, res) => {
 
         await newPost.save();
 
-        res.status(201).json({ success: true, message: "Post created successfully", newPost });
+        user.blogs.push(newPost);
+
+        await user.save();
+
+        res.status(201).json({ success: true, message: "Post created successfully" });
 
     } catch (error) {
         res.status(409).json({ message: error.message });
@@ -38,11 +55,11 @@ export const editBlog = async (req, res) => {
     try {
 
         const id = req.params.id;
-        const { title, text, img, tags } = req.body;
+        const { title, text, image, tags } = req.body;
         let imgUrl;
 
-        if (img) {
-            const uploadResponse = await cloudinary.uploader.upload(img)
+        if (image) {
+            const uploadResponse = await cloudinary.uploader.upload(image)
             imgUrl = uploadResponse.secure_url
         }
 
@@ -93,16 +110,17 @@ export const deleteBlog = async (req, res) => {
 
 export const searchBlog = async (req, res) => {
     try {
-        const { query } = req.body;
+        const query = req.params.query;
 
-        const posts = await Blog.find({
-            $or: [
-                { title: { $regex: query, $options: 'i' } },
-                { author: { $regex: query, $options: 'i' } }
-            ]
+        if (!query) return res.status(404).json({ message: "No query provided" });
+
+        if (query.length < 2) return res.status(404).json({ message: "Query must be at least 2 characters long" });
+
+        const blogs = await Blog.find({
+            title: { $regex: new RegExp(query, 'i') }
         });
 
-        res.status(200).json(posts);
+        res.status(200).json(blogs);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
