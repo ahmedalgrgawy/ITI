@@ -8,7 +8,6 @@ function App() {
 
     <div className="flex flex-col gap-10 items-center justify-center min-h-screen">
       <Navbar />
-
       <Routes>
         <Route path="/to-do" element={<TodoList />} />
         <Route path="/form" element={<Form />} />
